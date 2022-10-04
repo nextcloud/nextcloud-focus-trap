@@ -22,7 +22,7 @@ const createFocusTrap = (
 
   extra.set(real, els);
 
-  const activate = (...args) => {
+  const activate: typeof real.activate = (...args) => {
     state.list.forEach((row) => {
       row.pause();
     });
@@ -32,13 +32,12 @@ const createFocusTrap = (
     return real.activate(...args);
   };
 
-  const deactivate = (...args) => {
+  const deactivate: typeof real.deactivate = (...args) => {
     const res = real.deactivate(...args);
-
     const index = state.list.findIndex((row) => row === real);
 
     if (index >= 0) {
-      state.list.slice(index, 1);
+      state.list.splice(index, 1);
     }
 
     const last = state.list[state.list.length - 1];
@@ -51,7 +50,7 @@ const createFocusTrap = (
   };
 
   return new Proxy(real, {
-    get(target, p, receiver) {
+    get(target, p: keyof FocusTrap) {
       if (p === "activate") {
         return activate;
       }
