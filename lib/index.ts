@@ -1,16 +1,28 @@
 import type { Options, FocusTrap } from "focus-trap";
-import { createFocusTrap as create } from 'focus-trap'
+import { createFocusTrap as create } from "focus-trap";
 
 type Element = HTMLElement | SVGElement | string;
 type ElementList = Array<Element>;
 
-const extra = new WeakMap<FocusTrap, Set<Element>>();
+type FocusTrapGlobalState = Readonly<{
+  list: FocusTrap[];
+  elements: WeakMap<FocusTrap, Set<Element>>;
+}>;
 
-const state = {
-  list: [] as FocusTrap[],
-};
+declare global {
+  interface Window {
+    _nc_focus_trap: FocusTrapGlobalState;
+  }
+}
 
-// window._nc_focus_trap
+const state: FocusTrapGlobalState = window._nc_focus_trap
+  ? window._nc_focus_trap
+  : Object.freeze({
+      list: [],
+      elements: new WeakMap<FocusTrap, Set<Element>>(),
+    });
+
+window._nc_focus_trap = state;
 
 const createFocusTrap = (
   element: Element | ElementList,
@@ -20,7 +32,7 @@ const createFocusTrap = (
 
   const els = new Set(Array.isArray(element) ? [...element] : [element]);
 
-  extra.set(real, els);
+  state.elements.set(real, els);
 
   const activate: typeof real.activate = (...args) => {
     state.list.forEach((row) => {
@@ -70,8 +82,8 @@ const createFocusTrap = (
 };
 
 const getActiveTrap = (): FocusTrap | undefined => {
-  return state.list.find(row=> row.active)
-}
+  return state.list.find((row) => row.active);
+};
 
 const addToActive = (el: Element) => {
   const active = getActiveTrap();
@@ -80,13 +92,13 @@ const addToActive = (el: Element) => {
     return;
   }
 
-  const els = extra.get(active);
+  const els = state.elements.get(active);
 
   // @ts-expect-error
   els.add(el);
 
   // @ts-expect-error
-  return active.updateContainerElements([...els.values()]);
+  active.updateContainerElements([...els.values()]);
 };
 
 const removeFromActive = (el: Element) => {
@@ -96,13 +108,13 @@ const removeFromActive = (el: Element) => {
     return;
   }
 
-  const els = extra.get(active);
+  const els = state.elements.get(active);
 
   // @ts-expect-error
   els.delete(el);
 
   // @ts-expect-error
-  return active.updateContainerElements([...els.values()]);
+  active.updateContainerElements([...els.values()]);
 };
 
 export { FocusTrap, Options };
