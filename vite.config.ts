@@ -26,7 +26,7 @@ export default defineConfig({
     environment: "jsdom",
     alias: {
       "@nextcloud/focus-trap": fileURLToPath(
-        new URL("./lib/index.ts", import.meta.url)
+        new URL("./lib/", import.meta.url)
       ),
     },
   },

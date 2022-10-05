@@ -1,19 +1,8 @@
 import type { Options, FocusTrap } from "focus-trap";
+import type { FocusTrapGlobalState, Element, ElementList } from "./types";
+
 import { createFocusTrap as create } from "focus-trap";
-
-type Element = HTMLElement | SVGElement | string;
-type ElementList = Array<Element>;
-
-type FocusTrapGlobalState = Readonly<{
-  list: FocusTrap[];
-  elements: WeakMap<FocusTrap, Set<Element>>;
-}>;
-
-declare global {
-  interface Window {
-    _nc_focus_trap: FocusTrapGlobalState;
-  }
-}
+import { SymbolRealInstance } from "./utils";
 
 const state: FocusTrapGlobalState = window._nc_focus_trap
   ? window._nc_focus_trap
@@ -62,7 +51,7 @@ const createFocusTrap = (
   };
 
   return new Proxy(real, {
-    get(target, p: keyof FocusTrap) {
+    get(target, p: keyof FocusTrap | symbol) {
       if (p === "activate") {
         return activate;
       }
@@ -71,12 +60,15 @@ const createFocusTrap = (
         return deactivate;
       }
 
+      if (p === SymbolRealInstance) {
+        return target
+      }
       // Deliberately ignoring pause and unpause
       // as the scenario of pausing while being
       // active and used is very unlikely
 
       // return the expected/original prop
-      return target[p];
+      return target[p as keyof FocusTrap];
     },
   });
 };
@@ -118,4 +110,9 @@ const removeFromActive = (el: Element) => {
 };
 
 export { FocusTrap, Options };
-export { createFocusTrap, getActiveTrap, addToActive, removeFromActive };
+export {
+  createFocusTrap,
+  getActiveTrap,
+  addToActive,
+  removeFromActive,
+};

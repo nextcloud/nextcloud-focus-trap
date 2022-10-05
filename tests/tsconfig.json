@@ -5,7 +5,8 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@nextcloud/focus-trap": ["../lib/index.ts"]
+      "@nextcloud/focus-trap/utils.ts": ["../lib/utils.ts"],
+      "@nextcloud/focus-trap": ["../lib"]
     }
   },
   "include": ["*.ts"],
