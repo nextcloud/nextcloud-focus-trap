@@ -1,2 +1,5 @@
+__mocks__/
+tests/
+src/
 node_modules/
 coverage/
