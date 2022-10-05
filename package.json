@@ -28,6 +28,8 @@
   "scripts": {
     "build": "vite build",
     "build:doc": "typedoc --out dist/doc lib && touch dist/doc/.nojekyll",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "dev": "vite dev"
   },
   "dependencies": {
