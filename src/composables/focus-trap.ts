@@ -1,17 +1,16 @@
-import type { ComputedRef, Ref } from "vue";
-import type { FocusTrap } from "../../lib";
+import type { ComputedRef, Ref } from 'vue';
+import type { FocusTrap } from '../../lib';
 
-import { watchEffect, onBeforeUnmount, nextTick } from "vue";
-import { createFocusTrap } from "../../lib";
+import { watchEffect, onBeforeUnmount } from 'vue';
+import { createFocusTrap } from '../../lib';
 
 type Input = ComputedRef<boolean> | Ref<boolean>;
 
-const useFocusTrap = (state: Input, el: Ref<HTMLElement | null>) => {
+const useFocusTrap = (state: Input, el: Ref<HTMLElement | null>): void => {
   let focusTrap: FocusTrap | null = null;
 
-  const onOpen = () => {
-
-    if (!el.value) {
+  const onOpen = (): void => {
+    if (el.value == null) {
       return;
     }
 
@@ -23,8 +22,8 @@ const useFocusTrap = (state: Input, el: Ref<HTMLElement | null>) => {
     focusTrap.activate();
   };
 
-  const onClose = () => {
-    if (!focusTrap) {
+  const onClose = (): void => {
+    if (focusTrap == null) {
       return;
     }
 

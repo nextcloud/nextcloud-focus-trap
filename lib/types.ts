@@ -1,7 +1,7 @@
-import type { FocusTrap } from "focus-trap";
+import type { FocusTrap } from 'focus-trap';
 
 export type Element = HTMLElement | SVGElement | string;
-export type ElementList = Array<Element>;
+export type ElementList = Element[];
 
 export type FocusTrapGlobalState = Readonly<{
   list: FocusTrap[];

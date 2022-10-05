@@ -32,6 +32,7 @@
     "test:watch": "vitest",
     "dev": "vite dev",
     "lint": "eslint lib src",
+    "lint:fix": "eslint lib src --fix",
     "format": "prettier -w .",
     "format:check": "prettier -c .",
     "check": "yarn lint && yarn format:check"

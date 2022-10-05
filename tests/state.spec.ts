@@ -1,8 +1,8 @@
-import { describe, expect, test, vi } from "vitest";
-import { createFocusTrap, FocusTrap } from "@nextcloud/focus-trap";
-import { getRealInstance } from "@nextcloud/focus-trap/utils.ts";
+import { describe, expect, test, vi } from 'vitest';
+import { createFocusTrap, FocusTrap } from '@nextcloud/focus-trap';
+import { getRealInstance } from '@nextcloud/focus-trap/utils.ts';
 
-vi.mock("focus-trap", () => {
+vi.mock('focus-trap', () => {
   const factory = vi.fn().mockImplementation(() => {
     const instance = {
       paused: false,
@@ -31,14 +31,14 @@ vi.mock("focus-trap", () => {
   return { createFocusTrap: factory };
 });
 
-describe("state", () => {
-  test("factory", () => {
+describe('state', () => {
+  test('factory', () => {
     expect(window._nc_focus_trap).toMatchObject({
       list: [],
       elements: new WeakMap(),
     });
 
-    const root = document.createElement("div");
+    const root = document.createElement('div');
 
     expect(window._nc_focus_trap.list).length(0);
 
@@ -53,10 +53,10 @@ describe("state", () => {
     expect(window._nc_focus_trap.elements.get(real)).contain(root);
   });
 
-  test("multiple instances", () => {
+  test('multiple instances', () => {
     // root elements to be used as references
-    const rootA = document.createElement("div");
-    const rootB = document.createElement("div");
+    const rootA = document.createElement('div');
+    const rootB = document.createElement('div');
 
     // no active traps
     expect(window._nc_focus_trap.list).length(0);

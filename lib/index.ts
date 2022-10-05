@@ -1,15 +1,16 @@
-import type { Options, FocusTrap } from "focus-trap";
-import type { FocusTrapGlobalState, Element, ElementList } from "./types";
+import type { Options, FocusTrap } from 'focus-trap';
+import type { FocusTrapGlobalState, Element, ElementList } from './types';
 
-import { createFocusTrap as create } from "focus-trap";
-import { SymbolRealInstance } from "./utils";
+import { createFocusTrap as create } from 'focus-trap';
+import { SymbolRealInstance } from './utils';
 
-const state: FocusTrapGlobalState = window._nc_focus_trap
-  ? window._nc_focus_trap
-  : Object.freeze({
-      list: [],
-      elements: new WeakMap<FocusTrap, Set<Element>>(),
-    });
+const state: FocusTrapGlobalState =
+  window._nc_focus_trap !== undefined
+    ? window._nc_focus_trap
+    : Object.freeze({
+        list: [],
+        elements: new WeakMap<FocusTrap, Set<Element>>(),
+      });
 
 window._nc_focus_trap = state;
 
@@ -24,7 +25,7 @@ const createFocusTrap = (
   state.elements.set(real, els);
 
   const activate: typeof real.activate = (...args) => {
-    state.list.forEach((row) => {
+    state.list.forEach(row => {
       row.pause();
     });
 
@@ -35,7 +36,7 @@ const createFocusTrap = (
 
   const deactivate: typeof real.deactivate = (...args) => {
     const res = real.deactivate(...args);
-    const index = state.list.findIndex((row) => row === real);
+    const index = state.list.findIndex(row => row === real);
 
     if (index >= 0) {
       state.list.splice(index, 1);
@@ -43,7 +44,7 @@ const createFocusTrap = (
 
     const last = state.list[state.list.length - 1];
 
-    if (last && last.paused) {
+    if (last?.paused) {
       last.unpause();
     }
 
@@ -52,16 +53,16 @@ const createFocusTrap = (
 
   return new Proxy(real, {
     get(target, p: keyof FocusTrap | symbol) {
-      if (p === "activate") {
+      if (p === 'activate') {
         return activate;
       }
 
-      if (p === "deactivate") {
+      if (p === 'deactivate') {
         return deactivate;
       }
 
       if (p === SymbolRealInstance) {
-        return target
+        return target;
       }
       // Deliberately ignoring pause and unpause
       // as the scenario of pausing while being
@@ -74,13 +75,13 @@ const createFocusTrap = (
 };
 
 const getActiveTrap = (): FocusTrap | undefined => {
-  return state.list.find((row) => row.active);
+  return state.list.find(row => row.active);
 };
 
-const addToActive = (el: Element) => {
+const addToActive = (el: Element): void => {
   const active = getActiveTrap();
 
-  if (!active) {
+  if (active == null) {
     return;
   }
 
@@ -93,10 +94,10 @@ const addToActive = (el: Element) => {
   active.updateContainerElements([...els.values()]);
 };
 
-const removeFromActive = (el: Element) => {
+const removeFromActive = (el: Element): void => {
   const active = getActiveTrap();
 
-  if (!active) {
+  if (active == null) {
     return;
   }
 
@@ -110,9 +111,4 @@ const removeFromActive = (el: Element) => {
 };
 
 export { FocusTrap, Options };
-export {
-  createFocusTrap,
-  getActiveTrap,
-  addToActive,
-  removeFromActive,
-};
+export { createFocusTrap, getActiveTrap, addToActive, removeFromActive };
