@@ -22,7 +22,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE"
   ],
   "scripts": {
     "build": "vite build",
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.1.2",
+    "@vitest/coverage-c8": "^0.23.4",
     "autoprefixer": "^10.4.12",
     "floating-vue": "^2.0.0-beta.20",
     "jsdom": "^20.0.1",

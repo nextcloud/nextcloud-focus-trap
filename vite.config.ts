@@ -23,6 +23,9 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    coverage: {
+      reporter: ['lcov', 'text'],
+    },
     environment: "jsdom",
     alias: {
       "@nextcloud/focus-trap": fileURLToPath(
