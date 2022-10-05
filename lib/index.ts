@@ -2,7 +2,7 @@ import type { Options, FocusTrap } from 'focus-trap';
 import type { FocusTrapGlobalState, Element, ElementList } from './types';
 
 import { createFocusTrap as create } from 'focus-trap';
-import { SymbolRealInstance } from './utils';
+import { SymbolRealInstance, getActiveTrap } from './utils';
 
 const state: FocusTrapGlobalState =
   window._nc_focus_trap !== undefined
@@ -74,10 +74,6 @@ const createFocusTrap = (
   });
 };
 
-const getActiveTrap = (): FocusTrap | undefined => {
-  return state.list.find(row => row.active);
-};
-
 const addToActive = (el: Element): void => {
   const active = getActiveTrap();
 
@@ -111,4 +107,4 @@ const removeFromActive = (el: Element): void => {
 };
 
 export { FocusTrap, Options };
-export { createFocusTrap, getActiveTrap, addToActive, removeFromActive };
+export { createFocusTrap, addToActive, removeFromActive };
