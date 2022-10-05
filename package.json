@@ -30,18 +30,31 @@
     "build:doc": "typedoc --out dist/doc lib && touch dist/doc/.nojekyll",
     "test": "vitest run",
     "test:watch": "vitest",
-    "dev": "vite dev"
+    "dev": "vite dev",
+    "lint": "eslint lib src",
+    "format": "prettier -w .",
+    "format:check": "prettier -c .",
+    "check": "yarn lint && yarn format:check"
   },
   "dependencies": {
     "focus-trap": "^7.0.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@vitejs/plugin-vue": "^3.1.2",
     "@vitest/coverage-c8": "^0.23.4",
     "autoprefixer": "^10.4.12",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.0.1",
+    "eslint-plugin-vue": "^9.6.0",
     "floating-vue": "^2.0.0-beta.20",
     "jsdom": "^20.0.1",
     "postcss": "^8.4.17",
+    "prettier": "^2.7.1",
     "rollup": "^2.79.1",
     "tailwindcss": "^3.1.8",
     "tslib": "^2.4.0",
