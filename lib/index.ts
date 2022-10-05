@@ -106,5 +106,5 @@ const removeFromActive = (el: Element): void => {
   active.updateContainerElements([...els.values()]);
 };
 
-export { FocusTrap, Options };
+export { FocusTrap, Options, Element, ElementList };
 export { createFocusTrap, addToActive, removeFromActive };

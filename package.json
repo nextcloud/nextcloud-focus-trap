@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "build": "vite build",
-    "build:doc": "typedoc --out dist/doc lib && touch dist/doc/.nojekyll",
+    "build:doc": "vite build -c vite.config.doc.ts && typedoc",
     "test": "vitest run",
     "test:watch": "vitest",
     "dev": "vite dev",
