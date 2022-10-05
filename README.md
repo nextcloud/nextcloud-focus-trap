@@ -69,3 +69,55 @@ const useFocusTrap = (state: Input, el: Ref<HTMLElement | null>): void => {
 
 export { useFocusTrap };
 ```
+
+## Development
+
+This project is build on top of
+
+- [focus-trap](https://github.com/focus-trap/focus-trap)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [Vitest](https://vitest.dev/)
+- [Vue](https://vuejs.org/)
+- [Tailwindcss](https://tailwindcss.com/)
+
+### Install dependencies
+
+```sh
+npm install
+```
+
+### Run tests
+
+```sh
+# test single run
+npm run test
+
+# test with coverage
+npm run test -- --coverage
+
+# watch tests and code changes
+npm run test:watch
+```
+
+### Run demo app
+
+```sh
+npm run dev
+```
+
+### Linter & Format
+
+```sh
+# apply prettier
+npm run format
+
+# run eslint
+npm run lint
+
+# apply fix to eslint errors
+npm run lint:fix
+
+# check lint and format
+npm run check
+```
