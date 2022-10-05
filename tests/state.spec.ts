@@ -2,34 +2,7 @@ import { describe, expect, test, vi } from 'vitest';
 import { createFocusTrap, FocusTrap } from '@nextcloud/focus-trap';
 import { getRealInstance } from '@nextcloud/focus-trap/utils.ts';
 
-vi.mock('focus-trap', () => {
-  const factory = vi.fn().mockImplementation(() => {
-    const instance = {
-      paused: false,
-      active: false,
-      activate: vi.fn(() => {
-        instance.active = true;
-        return instance;
-      }),
-      deactivate: vi.fn(() => {
-        instance.active = false;
-        return instance;
-      }),
-      pause: vi.fn(() => {
-        instance.paused = true;
-        return instance;
-      }),
-      unpause: vi.fn(() => {
-        instance.paused = false;
-        return instance;
-      }),
-    } as Partial<FocusTrap>;
-
-    return instance;
-  });
-
-  return { createFocusTrap: factory };
-});
+vi.mock('focus-trap');
 
 describe('state', () => {
   test('factory', () => {
