@@ -2,7 +2,7 @@ import type { Options, FocusTrap } from 'focus-trap';
 import type { FocusTrapGlobalState, Element, ElementList } from './types';
 
 import { createFocusTrap as create } from 'focus-trap';
-import { SymbolRealInstance, getActiveTrap } from './utils';
+import { getActiveTrap } from './utils';
 
 const state: FocusTrapGlobalState =
   window._nc_focus_trap !== undefined
@@ -18,25 +18,37 @@ const createFocusTrap = (
   element: Element | ElementList,
   userOptions?: Options
 ): FocusTrap => {
-  const real = create(element, userOptions);
+  // Create original focus trap
+  const trap = create(element, userOptions);
 
+  // Initialize elements
   const els = new Set(Array.isArray(element) ? [...element] : [element]);
+  state.elements.set(trap, els);
 
-  state.elements.set(real, els);
+  const originalActivate = trap.activate
+  const originalDeactivate = trap.deactivate
 
-  const activate: typeof real.activate = (...args) => {
+  /**
+   * Activate the focus trap and pause all
+   * the other registered traps
+   */
+  trap.activate = function(...args) {
     state.list.forEach(row => {
       row.pause();
     });
 
-    state.list.push(real);
+    state.list.push(trap);
 
-    return real.activate(...args);
+    return originalActivate(...args);
   };
 
-  const deactivate: typeof real.deactivate = (...args) => {
-    const res = real.deactivate(...args);
-    const index = state.list.findIndex(row => row === real);
+  /**
+   * Deactivate the focus trap and unpause
+   * the last registered trap
+   */
+  trap.deactivate = function(...args) {
+    const res = originalDeactivate(...args);
+    const index = state.list.findIndex(row => row === trap);
 
     if (index >= 0) {
       state.list.splice(index, 1);
@@ -51,27 +63,7 @@ const createFocusTrap = (
     return res;
   };
 
-  return new Proxy(real, {
-    get(target, p: keyof FocusTrap | symbol) {
-      if (p === 'activate') {
-        return activate;
-      }
-
-      if (p === 'deactivate') {
-        return deactivate;
-      }
-
-      if (p === SymbolRealInstance) {
-        return target;
-      }
-      // Deliberately ignoring pause and unpause
-      // as the scenario of pausing while being
-      // active and used is very unlikely
-
-      // return the expected/original prop
-      return target[p as keyof FocusTrap];
-    },
-  });
+  return trap
 };
 
 const addToActive = (el: Element): void => {
